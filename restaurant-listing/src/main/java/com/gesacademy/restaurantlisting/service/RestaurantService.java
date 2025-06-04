@@ -5,6 +5,7 @@ import com.gesacademy.restaurantlisting.entity.Restaurant;
 import com.gesacademy.restaurantlisting.mapper.RestaurantMapper;
 import com.gesacademy.restaurantlisting.repository.RestaurantRepository;
 import org.springframework.stereotype.Service;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
 
@@ -43,4 +44,20 @@ public class RestaurantService {
         Restaurant saved = restaurantRepository.save(restaurant);
         return restaurantMapper.toDto(saved);
     }
+
+
+    /**
+     * Find a restaurant by its id.
+     *
+     * @param id the restaurant's identifier
+     * @return the corresponding {@link RestaurantDto}
+     * @throws EntityNotFoundException if no restaurant with the given id exists
+     */
+    public RestaurantDto getRestaurantById(Long id) {
+        Restaurant restaurant = restaurantRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Restaurant not found with id: " + id));
+        return restaurantMapper.toDto(restaurant);
+    }
+
+
 }

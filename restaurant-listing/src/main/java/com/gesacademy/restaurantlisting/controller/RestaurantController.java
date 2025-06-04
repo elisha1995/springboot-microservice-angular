@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import jakarta.persistence.EntityNotFoundException;
 
 @RestController
 @RequestMapping("/restaurants")
@@ -32,6 +34,16 @@ public class RestaurantController {
     public ResponseEntity<RestaurantDto> createRestaurant(@RequestBody RestaurantDto restaurantDto) {
         RestaurantDto created = restaurantService.createRestaurant(restaurantDto);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<RestaurantDto> getRestaurantById(@PathVariable Long id) {
+        try {
+            RestaurantDto restaurant = restaurantService.getRestaurantById(id);
+            return ResponseEntity.ok(restaurant);
+        } catch (EntityNotFoundException ex) {
+            return new ResponseEntity(ex.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 
 
