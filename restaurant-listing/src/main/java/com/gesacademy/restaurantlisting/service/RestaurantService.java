@@ -30,4 +30,17 @@ public class RestaurantService {
                 .map(restaurantMapper::toDto)
                 .toList();
     }
+
+
+    /**
+     * Create and persist a new {@link Restaurant}.
+     *
+     * @param restaurantDto the data for the restaurant to create
+     * @return the persisted restaurant as a {@link RestaurantDto}
+     */
+    public RestaurantDto createRestaurant(RestaurantDto restaurantDto) {
+        Restaurant restaurant = restaurantMapper.toEntity(restaurantDto);
+        Restaurant saved = restaurantRepository.save(restaurant);
+        return restaurantMapper.toDto(saved);
+    }
 }
